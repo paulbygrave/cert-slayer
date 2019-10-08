@@ -2,20 +2,6 @@ from classes.game import Person, bcolors
 from classes.magic import Spell
 from classes.inventory import Item
 
-print("\n")
-print("NAME                  HP                                     MP")
-print("                      _________________________              __________ ")
-print(bcolors.BOLD + "Valos:      " + 
-    "260/460  |" + bcolors.OKGREEN + "█████████████            " + bcolors.ENDC + bcolors.BOLD + "|     " +    
-    "65/65  |" + bcolors.OKBLUE + "██████████" + bcolors.ENDC + "|")
-
-print("                      _________________________              __________ ")
-print("Valos:      460/460  |                         |     65/65  |          |")
-
-print("                      _________________________              __________ ")
-print("Valos:      460/460  |                         |     65/65  |          |")
-
-print("\n")
 
 # Create Black Magic
 fire = Spell("Fire", 10, 100, "black")
@@ -42,8 +28,12 @@ player_items = [{"item": potion, "quantity": 5}, {"item": hipotion, "quantity": 
                 {"item": elixer, "quantity": 5}, {"item": hielixer, "quantity": 5}, {"item": grenade, "quantity": 5}]
 
 # Instantiate People
-player = Person(460, 65, 60, 34, player_spells, player_items)
-enemy = Person(1200, 65, 45, 25, [], [])
+player1 = Person("Cloud   :", 3460, 65, 60, 34, player_spells, player_items)
+player2 = Person("Barrett :", 5160, 65, 60, 34, player_spells, player_items)
+player3 = Person("Tifa    :", 2750, 65, 60, 34, player_spells, player_items)
+players = [player1, player2, player3]
+
+enemy = Person("Sephiroth :", 1200, 65, 45, 25, [], [])
 
 running = True
 i = 0
@@ -54,9 +44,19 @@ print(bcolors.FAIL + bcolors.BOLD + "AN ENEMY ATTACKS!" + bcolors.ENDC)
 
 while running:
     print("==============================")
-    try:
+    print("\n\n")
+
+    print("\n")
+    print("NAME                 HP                                     MP")
+    for player in players:
+        player.get_stats()
+
+    print("\n")
+
+    for player in players:   
+
         player.choose_action()
-        choice = input("Choose action: ")
+        choice = input("    Choose action: ")
         index = int(choice) - 1
 
         # Index 0 is the "Attack" option
@@ -68,8 +68,8 @@ while running:
         # Index 1 is the "Magic" option
         elif index == 1:
             player.choose_magic()
-            magic_choice = int(input("Choose magic: ")) -1
-            
+            magic_choice = int(input("    Choose magic: ")) -1
+                
             if magic_choice == -1:
                 continue
 
@@ -94,11 +94,11 @@ while running:
         # Index 2 is the "Item" option
         elif index == 2:
             player.choose_item()
-            item_choice = int(input("Choose item: ")) - 1
+            item_choice = int(input("    Choose item: ")) - 1
 
             if item_choice == -1:
                 continue
-            
+                
             item = player.items[item_choice]["item"]
             if player.items[item_choice]["quantity"] == 0:
                 print(bcolors.FAIL + "\n" + "None left..." + bcolors.ENDC)
@@ -117,23 +117,18 @@ while running:
                 enemy.take_damage(item.prop)
                 print(bcolors.FAIL + "\n" + item.name + " deals", str(item.prop), "points of damage." + bcolors.ENDC)
 
-        enemy_choice = 1
+    enemy_choice = 1
 
-        enemy_dmg = enemy.generate_damage()
-        player.take_damage(enemy_dmg)
-        print("Enemy attacks for", enemy_dmg, "points of damage.")
+    enemy_dmg = enemy.generate_damage()
+    player1.take_damage(enemy_dmg)
+    print("Enemy attacks for", enemy_dmg, "points of damage.")
 
-        print("==============================")
-        print("Enemy HP:", bcolors.FAIL + str(enemy.get_hp()) + "/" + str(enemy.get_max_hp()) + bcolors.ENDC + "\n")
-        print("Your HP:", bcolors.OKGREEN + str(player.get_hp()) + "/" + str(player.get_max_hp()) + bcolors.ENDC)
-        print("Your MP:", bcolors.OKBLUE + str(player.get_mp()) + "/" + str(player.get_max_mp()) + bcolors.ENDC + "\n")
+    print("==============================")
+    print("Enemy HP:", bcolors.FAIL + str(enemy.get_hp()) + "/" + str(enemy.get_max_hp()) + bcolors.ENDC + "\n")
 
-        if enemy.get_hp() == 0:
+    if enemy.get_hp() == 0:
             print(bcolors.OKGREEN + "You have defeated the enemy!" + bcolors.ENDC)
             running = False
-        elif player.get_hp() == 0:
+    elif player.get_hp() == 0:
             print(bcolors.FAIL + "The enemy has defeated you!" + bcolors.ENDC)
             running = False
-
-    except ValueError as err:
-        print("Please choose a valid action!")
