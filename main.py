@@ -4,15 +4,15 @@ from classes.inventory import Item
 
 
 # Create Black Magic
-fire = Spell("Fire", 10, 100, "black")
-thunder = Spell("Thunder", 10, 100, "black")
-blizzard = Spell("Blizzard", 10, 100, "black")
-meteor = Spell("Meteor", 20, 200, "black")
-quake = Spell("Quake", 14, 140, "black")
+fire = Spell("Fire", 100, 1000, "black")
+thunder = Spell("Thunder", 100, 1000, "black")
+blizzard = Spell("Blizzard", 100, 1000, "black")
+meteor = Spell("Meteor", 200, 2000, "black")
+quake = Spell("Quake", 140, 1400, "black")
 
 # Create White Magic
-cure = Spell("Cure", 12, 120, "white")
-cura = Spell("Cura", 18, 200, "white")
+cure = Spell("Cure", 120, 1200, "white")
+cura = Spell("Cura", 180, 2000, "white")
 
 
 # Create some Items
@@ -28,12 +28,12 @@ player_items = [{"item": potion, "quantity": 5}, {"item": hipotion, "quantity": 
                 {"item": elixer, "quantity": 5}, {"item": hielixer, "quantity": 5}, {"item": grenade, "quantity": 5}]
 
 # Instantiate People
-player1 = Person("Cloud   :", 3460, 65, 60, 34, player_spells, player_items)
-player2 = Person("Barrett :", 5160, 65, 60, 34, player_spells, player_items)
-player3 = Person("Tifa    :", 2750, 65, 60, 34, player_spells, player_items)
+player1 = Person("Cloud   :", 3460, 600, 432, 34, player_spells, player_items)
+player2 = Person("Barrett :", 5160, 400, 270, 34, player_spells, player_items)
+player3 = Person("Tifa    :", 2750, 350, 297, 34, player_spells, player_items)
 players = [player1, player2, player3]
 
-enemy = Person("Sephiroth :", 1200, 65, 45, 25, [], [])
+enemy = Person("Sephiroth :", 12543, 3765, 999, 25, [], [])
 
 running = True
 i = 0
@@ -44,10 +44,9 @@ print(bcolors.FAIL + bcolors.BOLD + "AN ENEMY ATTACKS!" + bcolors.ENDC)
 
 while running:
     print("==============================")
-    print("\n\n")
 
     print("\n")
-    print("NAME                 HP                                     MP")
+    print("NAME                     HP                                       MP")
     for player in players:
         player.get_stats()
 
@@ -63,7 +62,7 @@ while running:
         if index == 0:
             dmg = player.generate_damage()
             enemy.take_damage(dmg)
-            print("You attacked for", dmg, "points of damage.")
+            print(player.name, "attacked for", dmg, "points of damage.")
 
         # Index 1 is the "Magic" option
         elif index == 1:
