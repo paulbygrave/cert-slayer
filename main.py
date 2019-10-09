@@ -19,18 +19,18 @@ print(f'\nWelcome {hero}!\nThis is your story....\n')
 quest_text()
 
 player_spells = [study, practice, ask, handson, sleep, weekend]
-enemy_spells = [exhaustion, paternity, sick, drinking]
-player_items = [{"item": redbull, "quantity": 5}, {"item": studysnack, "quantity": 5}]
+enemy_spells = [exhaustion, paternity, sick, drinking, revision]
+player_items = [{"item": redbull, "quantity": 15}, {"item": studysnack, "quantity": 10}, {"item": magicbean, "quantity": 5}]
 
 # Instantiate players
-player1 = Character(str(hero.ljust(40, ' ')), 9999, 600, 432, 34, player_spells, player_items)
+player1 = Character(str(hero.ljust(40, ' ')), 9999, 600, 777, 500, player_spells, player_items)
 players = [player1]
 total_players = len(players)
 
 # Instantiate enemies
-enemy1 = Character(str("AWS_Solutions_Architect_Associate".ljust(40, ' ')), 2000, 1000, 600, 25, enemy_spells, [])
-enemy2 = Character(str("AWS_SysOps_Associate".ljust(40, ' ')), 4000, 1000, 999, 25, enemy_spells, [])
-enemy3 = Character(str("AWS_Developer_Associate".ljust(40, ' ')), 2500, 1000, 600, 25, enemy_spells, [])
+enemy1 = Character(str("AWS_Solutions_Architect_Associate".ljust(40, ' ')), 2000, 1000, 300, 250, enemy_spells, [])
+enemy2 = Character(str("AWS_SysOps_Associate".ljust(40, ' ')), 4000, 1000, 999, 250, enemy_spells, [])
+enemy3 = Character(str("AWS_Developer_Associate".ljust(40, ' ')), 2500, 1000, 300, 250, enemy_spells, [])
 enemies = [enemy1, enemy2, enemy3]
 total_enemies = len(enemies)
 
@@ -134,7 +134,7 @@ while running:
                 else:
                     player.hp = player.maxhp
                     player.mp = player.maxmp
-                print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP!"{bcolors.ENDC}')
+                print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP!{bcolors.ENDC}')
             elif item.type == "attack":
                 enemy = player.choose_target(enemies)
                 enemies[enemy].take_damage(item.prop)
@@ -160,8 +160,7 @@ while running:
 
     # Enemy attack phase
     for enemy in enemies:
-        # enemy_choice = random.randrange(0, 2)
-        enemy_choice = 1
+        enemy_choice = random.randrange(0, 2)
         if enemy_choice == 0:
             # Choose attack
             target = random.randrange(0, len(players))
@@ -195,12 +194,12 @@ while running:
 
         # Check if player won
         if defeated_enemies == total_enemies:
-            print(f'{bcolors.OKGREEN}\nYou have defeated the enemy!{bcolors.ENDC}')
+            print(f'{bcolors.OKGREEN}\nYou have passed the certification(s)!\nMake sure you post about it on LinkedIn and update your Kimble capabilities!{bcolors.ENDC}')
             running = False
             break
         # Check if enemy won
         elif defeated_players == total_players:
-            print(f'{bcolors.FAIL}\nThe enemies have defeated you!{bcolors.ENDC}')
+            print(f'{bcolors.FAIL}\nOh dear, it looks like you took on too much! Maybe just try and take on an easier certification next time?!{bcolors.ENDC}')
             running = False
             break
     
