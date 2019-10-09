@@ -6,11 +6,11 @@ from storytext import *
 from logos import *
 import random
 
-# # Print the title intro
-intro_text()
+# # # Print the title intro
+# intro_text()
 
-# # Print the logo
-main_logo()
+# # # Print the logo
+# main_logo()
 
 # Prompt user for name
 hero = input("Welcome Player! Please enter your name: ")
@@ -21,15 +21,15 @@ player_items = [{"item": potion, "quantity": 5}, {"item": hipotion, "quantity": 
                 {"item": elixer, "quantity": 5}, {"item": hielixer, "quantity": 5}, {"item": grenade, "quantity": 5}]
 
 # Instantiate players
-player1 = Character(str(hero.ljust(40, ' ')), 9999, 600, 432, 34, player_spells, player_items)
+player1 = Character(str(hero.ljust(40, ' ')), 3000, 600, 432, 34, player_spells, player_items)
 players = [player1]
 total_players = len(players)
 
 
 # Instantiate enemies
-enemy1 = Character(str("AWS Solutions Architect Associate".ljust(40, ' ')), 1, 1000, 600, 25, enemy_spells, [])
-enemy2 = Character(str("AWS SysOps Associate".ljust(40, ' ')), 1, 3765, 999, 25, enemy_spells, [])
-enemy3 = Character(str("AWS Developer Associate".ljust(40, ' ')), 1, 1000, 600, 25, enemy_spells, [])
+enemy1 = Character(str("AWS Solutions Architect Associate".ljust(40, ' ')), 2000, 1000, 600, 25, enemy_spells, [])
+enemy2 = Character(str("AWS SysOps Associate".ljust(40, ' ')), 10000, 1000, 999, 25, enemy_spells, [])
+enemy3 = Character(str("AWS Developer Associate".ljust(40, ' ')), 2500, 1000, 600, 25, enemy_spells, [])
 enemies = [enemy1, enemy2, enemy3]
 total_enemies = len(enemies)
 
@@ -49,7 +49,7 @@ while running:
 
     print("\n============================================================\n")
     # Print the health bars of all participants
-    print("NAME                                                   HP                                      MP")
+    print("NAME                                                     HP                                      MP")
     for player in players:
         player.get_stats()
     print("\n")

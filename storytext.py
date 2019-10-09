@@ -26,7 +26,7 @@ def intro_text():
     "That promise? That he would produce (in Python) a story of noble deeds.\n" + 
     "A story foretelling a battle against the combined forces of the mighty Cloud Certifications.\n\n")
     print_slow("..." + "\n\n" + "..." + "\n\n")
-    print_slow("This is that story....\n\n" + "..." + "\n\n" + "..." + "\n\n")
+    print_slow("This is his story....\n\n" + "..." + "\n\n" + "..." + "\n\n")
     time.sleep(3)
 
 def filler_space():

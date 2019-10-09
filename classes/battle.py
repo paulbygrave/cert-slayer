@@ -88,17 +88,17 @@ class Character:
             hp_bar += " "     
         hp_string = str(self.hp) + "/" + str(self.maxhp)
         current_hp = ""
-        if len(hp_string) < 9:
-            decreased = 9 - len(hp_string)
+        if len(hp_string) < 11:
+            decreased = 11 - len(hp_string)
             while decreased > 0:
                 current_hp += " "
                 decreased -= 1
             current_hp += hp_string
         else:
             current_hp = hp_string
-        print("                                                       __________________________________________________ ")
+        print("                                                         __________________________________________________ ")
         print(bcolors.BOLD + self.name + ":  " + 
-            current_hp.ljust(9, " ") + "  |" + bcolors.FAIL + hp_bar + bcolors.ENDC + bcolors.BOLD + "|     ")
+            current_hp.ljust(11, " ") + "  |" + bcolors.FAIL + hp_bar + bcolors.ENDC + bcolors.BOLD + "|     ")
 
     def get_stats(self):
         # All the code related to HP bar control
@@ -111,8 +111,8 @@ class Character:
             hp_bar += " "     
         hp_string = str(self.hp) + "/" + str(self.maxhp)
         current_hp = ""
-        if len(hp_string) < 9:
-            decreased = 9 - len(hp_string)
+        if len(hp_string) < 11:
+            decreased = 11 - len(hp_string)
             while decreased > 0:
                 current_hp += " "
                 decreased -= 1
@@ -138,9 +138,9 @@ class Character:
             current_mp += mp_string
         else:
             current_mp = mp_string
-        print("                                                       __________________________________________________ ")
+        print("                                                         __________________________________________________ ")
         print(bcolors.BOLD + self.name + ":  " +
-            current_hp.ljust(9, " ") + "  |" + bcolors.OKGREEN + hp_bar + bcolors.ENDC + bcolors.BOLD + "|    " +    
+            current_hp.ljust(11, " ") + "  |" + bcolors.OKGREEN + hp_bar + bcolors.ENDC + bcolors.BOLD + "|    " +    
             current_mp.ljust(7, " ") + "  |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
 
     def choose_enemy_spell(self):
