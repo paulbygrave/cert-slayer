@@ -12,7 +12,7 @@ def main_logo():
                                        /____/             
    """ 
    + bcolors.ENDC + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-   time.sleep(8)
+   time.sleep(5)
 
 
 
