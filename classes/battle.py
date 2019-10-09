@@ -150,7 +150,7 @@ class Character:
 
         pct = self.hp / self.maxhp * 100
 
-        if self.mp < spell.cost or spell.type == "white" and pct > 50:
+        if self.mp < spell.cost or spell.type == "white" and pct > 75:
             spell, magic_dmg = self.choose_enemy_spell()
             return spell, magic_dmg
         else:
