@@ -33,9 +33,9 @@ def fillspace():
     print_slow("..." + "\n\n" + "..." + "\n\n" + "..." + "\n\n")
 
 def quest_text():
-    print_slow("\n\nOur hero is new to Contino.\n" +
+    print_quick("\n\nOur hero is new to Contino.\n" +
     "...\n" + 
-    "They have completed the onboarding, setup their new equipment and has decided to Upskill!\n" +
+    "They have completed the onboarding, setup their new equipment and have decided to upskill!\n" +
     "...\n" + 
     "They start to look for something to study...\n" +
     "...\n" + 

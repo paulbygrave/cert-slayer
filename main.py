@@ -7,7 +7,7 @@ from logos import *
 import random
 
 # Print the title intro
-#intro_text()
+intro_text()
 
 # Print the logo
 main_logo()
@@ -189,7 +189,7 @@ while running:
                 print(f'{bcolors.OKBLUE}\n{enemy.name.replace(" ", "")} cast {spell.name} against {players[target].name.replace(" ", "")} dealing {str(magic_dmg)} damage.{bcolors.ENDC}')
 
                 if players[target].get_hp() == 0:
-                    print(f'{bcolors.FAIL}{bcolors.BOLD}{players[target].name.replace(" ", "")} + " has been defeated!{bcolors.ENDC}')
+                    print(f'{bcolors.FAIL}{bcolors.BOLD}{players[target].name.replace(" ", "")} has been defeated!{bcolors.ENDC}')
                     del players[target]
                     defeated_players += 1
 
