@@ -20,6 +20,7 @@ quest_text()
 
 player_spells = [study, practice, ask, handson, sleep, weekend]
 enemy_spells = [exhaustion, paternity, sick, drinking, revision]
+enemy_spells_high = [exhaustion, paternity, sick, revision]
 player_items = [{"item": redbull, "quantity": 15}, {"item": studysnack, "quantity": 10}, {"item": magicbean, "quantity": 5}]
 
 # Instantiate players
@@ -29,7 +30,7 @@ total_players = len(players)
 
 # Instantiate enemies
 enemy1 = Character(str("AWS_Solutions_Architect_Associate".ljust(40, ' ')), 2000, 1000, 300, 250, enemy_spells, [])
-enemy2 = Character(str("AWS_SysOps_Associate".ljust(40, ' ')), 4000, 1000, 999, 250, enemy_spells, [])
+enemy2 = Character(str("AWS_SysOps_Associate".ljust(40, ' ')), 4000, 1000, 999, 250, enemy_spells_high, [])
 enemy3 = Character(str("AWS_Developer_Associate".ljust(40, ' ')), 2500, 1000, 300, 250, enemy_spells, [])
 enemies = [enemy1, enemy2, enemy3]
 total_enemies = len(enemies)
