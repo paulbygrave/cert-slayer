@@ -1,94 +1,58 @@
 from classes.colours import bcolors
-from classes.game import Person
-from classes.magic import Spell
-from classes.inventory import Item
-import random, time, sys
-
-# Define the scrolltext functions
-def print_slow(str):
-    for letter in str:
-        sys.stdout.write(letter)
-        sys.stdout.flush()
-        time.sleep(0.1)
-
-def print_quick(str):
-    for letter in str:
-        sys.stdout.write(letter)
-        sys.stdout.flush()
-        time.sleep(0.05)
-
-# Create Black Magic
-fire = Spell("Fire", 100, 1000, "black")
-thunder = Spell("Thunder", 100, 1000, "black")
-blizzard = Spell("Blizzard", 100, 1000, "black")
-meteor = Spell("Meteor", 200, 2000, "black")
-quake = Spell("Quake", 140, 1400, "black")
-
-# Create White Magic
-cure = Spell("Cure", 120, 1200, "white")
-cura = Spell("Cura", 180, 2000, "white")
-
-
-# Create some Items
-potion = Item("Potion", "potion", "Heals 50HP", 50)
-hipotion = Item("Hi-Potion", "potion", "Heals 100HP", 100)
-superpotion = Item("Super-Potion", "potion", "Heals 500HP", 500)
-elixer = Item("Elixer", "elixer", "Fully restores HP/MP of one party member", 9999)
-hielixer = Item("MegaElixer", "elixer", "Fully restores party's HP/MP", 9999)
-grenade = Item("Grenade", "attack", "Deals 500 damage", 500)
+from classes.battle import Person
+from classes.magic import *
+from classes.inventory import *
+from storytext import *
+from logos import *
+import random
 
 player_spells = [fire, thunder, blizzard, meteor, cure, cura]
+enemy_spells = [fire, meteor, cure]
 player_items = [{"item": potion, "quantity": 5}, {"item": hipotion, "quantity": 5}, {"item": superpotion, "quantity": 5},
                 {"item": elixer, "quantity": 5}, {"item": hielixer, "quantity": 5}, {"item": grenade, "quantity": 5}]
 
 # Instantiate players
-player1 = Person("Cloud    :", 3460, 600, 432, 34, player_spells, player_items)
-player2 = Person("Barrett  :", 5160, 400, 270, 34, player_spells, player_items)
-player3 = Person("Tifa     :", 2750, 350, 297, 34, player_spells, player_items)
+player1 = Person("Cloud    :", 1, 600, 432, 34, player_spells, player_items)
+player2 = Person("Barrett  :", 1, 400, 270, 34, player_spells, player_items)
+player3 = Person("Tifa     :", 1, 350, 297, 34, player_spells, player_items)
 players = [player1, player2, player3]
+total_players = len(players)
 
 # Instantiate enemies
-enemy1 = Person("Soldier   :", 2500, 1000, 600, 25, [], [])
-enemy2 = Person("Sephiroth :", 12543, 3765, 999, 25, [], [])
-enemy3 = Person("Soldier   :", 2500, 1000, 600, 25, [], [])
+enemy1 = Person("Soldier   :", 1, 1000, 600, 25, enemy_spells, [])
+enemy2 = Person("Sephiroth :", 1, 3765, 999, 25, enemy_spells, [])
+enemy3 = Person("Soldier   :", 1, 1000, 600, 25, enemy_spells, [])
 enemies = [enemy1, enemy2, enemy3]
+total_enemies = len(enemies)
+
+# Set the defeated player and emey variables to zero
+defeated_enemies = 0
+defeated_players = 0
 
 running = True
 i = 0
 
 # Print the title intro
-print("PLACEHOLDER - ASCI TITLE LOGO GOES HERE" + "\n\n")
-print_slow("A long, long time ago..." + "\n\n")
-print_slow("..." + "\n\n")
-print_slow("(OK, on Monday 7th October at around 2 o'clock in the afternoon.)" + "\n\n")
-print_slow("..." + "\n\n")
-print_slow("In a galaxy far, far away..." + "\n\n")
-print_slow("..." + "\n\n")
-print_slow("(OK, meeting room 3.)" + "\n\n")
-print_slow("..." + "\n\n")
-print_quick("""A brave and noble warrior (OK, just me)...made a promise to the PeopleOps team. 
-That promise? That he would produce (in Python) a story of noble deeds.
-A story foretelling a battle against the combined forces of the mighty Cloud Certifications.\n\n""")
-print_slow("..." + "\n\n" + "..." + "\n\n" + "..." + "\n\n")
-print_slow("This is his story....\n\n" + "..." + "\n\n" + "..." + "\n\n")
+intro_text()
+
+# Print the logo
+main_logo()
 
 # Battle message displays
 print(bcolors.FAIL + bcolors.BOLD + "AN ENEMY ATTACKS!" + bcolors.ENDC)
 
-
 while running:
-    print("==============================")
 
-    print("\n")
+    print("\n==============================\n")
+    # Print the health bars of all participants
     print("NAME                      HP                                       MP")
     for player in players:
         player.get_stats()
-
     print("\n")
-
     for enemy in enemies:
         enemy.get_enemy_stats()
 
+    # If battle is ongoing, proceed with turn
     for player in players:   
 
         player.choose_action()
@@ -100,11 +64,12 @@ while running:
             dmg = player.generate_damage()
             enemy = player.choose_target(enemies)
             enemies[enemy].take_damage(dmg)
-            print(player.name, "attacked", enemies[enemy].name, "for", dmg, "damage.")
+            print("\n" + player.name.replace(" ", "").replace(":", ""), "attacked", enemies[enemy].name.replace(" ", "").replace(":", ""), "for", dmg, "damage.")
 
             if enemies[enemy].get_hp() == 0:
-                print(enemies[enemy].name + " has been defeated!")
+                print("\n" + enemies[enemy].name.replace(" ", "").replace(":", "") + " has been defeated!")
                 del enemies[enemy]
+                defeated_enemies += 1
 
         # Index 1 is the "Magic" option
         elif index == 1:
@@ -131,11 +96,12 @@ while running:
             elif spell.type == "black":
                 enemy = player.choose_target(enemies)
                 enemies[enemy].take_damage(magic_dmg)
-                print(bcolors.OKBLUE + "\n" + player.name + " cast " + spell.name + " against " + enemies[enemy].name +  " dealing", str(magic_dmg), "damage." + bcolors.ENDC)
+                print(bcolors.OKBLUE + "\n" + player.name.replace(" ", "").replace(":", "") + " cast " + spell.name + " against " + enemies[enemy].name.replace(" ", "").replace(":", "") +  " dealing", str(magic_dmg), "damage.\n" + bcolors.ENDC)
 
                 if enemies[enemy].get_hp() == 0:
-                    print(enemies[enemy].name + " has been defeated!")
+                    print(enemies[enemy].name.replace(" ", "").replace(":", "") + " has been defeated!")
                     del enemies[enemy]
+                    defeated_enemies += 1
 
         # Index 2 is the "Item" option
         elif index == 2:
@@ -168,34 +134,76 @@ while running:
             elif item.type == "attack":
                 enemy = player.choose_target(enemies)
                 enemies[enemy].take_damage(item.prop)
-                print(bcolors.FAIL + "\n" + item.name + " deals", str(item.prop), "damage to " + enemies[enemy].name + "." + bcolors.ENDC)
+                print(bcolors.FAIL + "\n" + item.name + " deals", str(item.prop), "damage to " + enemies[enemy].name.replace(" ", "").replace(":", "") + "." + "\n" + bcolors.ENDC)
 
                 if enemies[enemy].get_hp() == 0:
-                    print(enemies[enemy].name + " has been defeated!")
+                    print(enemies[enemy].name.replace(" ", "").replace(":", "") + " has been defeated!\n")
                     del enemies[enemy]
-
-    enemy_choice = 1
-    target = random.randrange(0, 3)
-    enemy_dmg = enemies[0].generate_damage()
+                    defeated_enemies += 1
     
-    players[target].take_damage(enemy_dmg)
-    print(enemies[enemy].name, "attacks for", enemy_dmg, "points of damage.")
-
-    defeated_enemies = 0
-    defeated_players = 0
-
-    for enemy in enemies:
-        if enemy.get_hp() == 0:
-            defeated_enemies +=1
-    
-    for player in players:
-        if player.get_hp() == 0:
-            defeated_players +=1
-
-    if defeated_enemies == len(enemies):
-            print(bcolors.OKGREEN + "You have defeated the enemy!" + bcolors.ENDC)
+        # Check if player won
+        if defeated_enemies == total_enemies:
+            print(bcolors.OKGREEN + "\n" "You have defeated the enemy!" + bcolors.ENDC)
             running = False
-
-    elif defeated_players == len(players):
+            break
+        # Check if enemy won
+        elif defeated_players == total_players:
             print(bcolors.FAIL + "The enemies have defeated you!" + bcolors.ENDC)
             running = False
+            break
+        
+    time.sleep(1)
+
+    # Enemy attack phase
+    for enemy in enemies:
+        enemy_choice = random.randrange(0, 2)
+
+        if enemy_choice == 0:
+            # Choose attack
+            target = random.randrange(0, len(players))
+            enemy_dmg = enemy.generate_damage()
+        
+            players[target].take_damage(enemy_dmg)
+            print(bcolors.FAIL + bcolors.BOLD + "\n" + enemy.name.replace(" ", "").replace(":", ""), "attacks " + 
+            players[target].name.replace(" ", "").replace(":", ""), "for", enemy_dmg, "points of damage." + bcolors.ENDC)
+
+            if players[target].get_hp() == 0:
+                print(bcolors.FAIL + bcolors.BOLD + players[target].name.replace(" ", "").replace(":", "") + " has been defeated!")
+                del players[target]
+                defeated_players += 1
+        
+        elif enemy_choice == 1:
+            spell, magic_dmg = enemy.choose_enemy_spell()
+            enemy.reduce_mp(spell.cost)
+
+            if spell.type == "white":
+                enemy.heal(magic_dmg)
+                print(bcolors.OKBLUE + "\n" + enemy.name.replace(" ", "").replace(":", "") , "cast", spell.name + ", which heals for", str(magic_dmg), "HP." + bcolors.ENDC)
+            elif spell.type == "black":
+               
+                target = random.randrange(0, len(players))
+
+                players[target].take_damage(magic_dmg)
+
+                print(bcolors.OKBLUE + "\n" + enemy.name.replace(" ", "").replace(":", "") + " cast " + spell.name + 
+                " against " + players[target].name.replace(" ", "").replace(":", "") +  " dealing", str(magic_dmg), "damage." + bcolors.ENDC)
+
+                if players[target].get_hp() == 0:
+                    print(bcolors.FAIL + bcolors.BOLD + players[target].name.replace(" ", "").replace(":", "") + " has been defeated!")
+                    del players[target]
+                    defeated_players += 1
+
+        # Check if player won
+        if defeated_enemies == total_enemies:
+            print(bcolors.OKGREEN + "\n" "You have defeated the enemy!" + bcolors.ENDC)
+            running = False
+            break
+        # Check if enemy won
+        elif defeated_players == total_players:
+            print(bcolors.FAIL + "\nThe enemies have defeated you!" + bcolors.ENDC)
+            running = False
+            break
+    
+    time.sleep(1)
+
+    
