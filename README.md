@@ -56,3 +56,11 @@ docker run hello-world
 Alternatively, you can fork and clone this repository, then execute the code by running:
 
 $ python3 main.py
+
+## Desired feature additions
+
+Random Enemy generator
+Save character states between battles
+Item rewards for victory
+External leaderboard for completionists
+
