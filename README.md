@@ -59,8 +59,8 @@ $ python3 main.py
 
 ## Desired feature additions
 
-Random Enemy generator
-Save character states between battles
-Item rewards for victory
+Random Enemy generator,
+Save character states between battles,
+Item rewards for victory,
 External leaderboard for completionists
 
