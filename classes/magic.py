@@ -29,4 +29,4 @@ sleep = Spell("Get a good night's sleep", 80, 1200, "white")
 weekend = Spell("It's the weekend!", 120, 3000, "white")
 
 # Create Enemy White Magic
-revision = Spell("Change the exam questions", 250, 2000, "white")
+revision = Spell("Change the exam questions", 250, 1250, "white")
