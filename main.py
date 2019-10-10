@@ -27,7 +27,7 @@ enemy_spells_high = [exhaustion, parental, sick, revision]
 player_items = [{"item": redbull, "quantity": 15}, {"item": studysnack, "quantity": 10}, {"item": magicbean, "quantity": 5}]
 
 # Instantiate players
-player1 = Character(str(hero.ljust(40, ' ')), 999, 999, 666, 500, player_spells, player_items)
+player1 = Character(str(hero.ljust(40, ' ')), 9999, 999, 666, 500, player_spells, player_items)
 players = [player1]
 total_players = len(players)
 
