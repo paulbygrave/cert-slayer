@@ -144,13 +144,14 @@ class Character:
             current_mp.ljust(7, " ") + "  |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
 
     def choose_enemy_spell(self):
+        # Since we don't need to choose the enemy's spells we'll randomly pick one
         magic_choice = random.randrange(0, len(self.magic))
         spell = self.magic[magic_choice]
         magic_dmg = spell.generate_damage()
 
+        # Give the enemy the option of using a healing spell only if health is less than 50%
         pct = self.hp / self.maxhp * 100
-
-        if self.mp < spell.cost or spell.type == "white" and pct > 75:
+        if self.mp < spell.cost or spell.type == "white" and pct > 50:
             spell, magic_dmg = self.choose_enemy_spell()
             return spell, magic_dmg
         else:

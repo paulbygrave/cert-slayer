@@ -5,11 +5,12 @@ from classes.inventory import *
 from storytext import *
 from logos import *
 import random
+import sys
 
-# Print the prologue 
+# # Print the prologue 
 intro_text()
 
-# Print the logo
+# # Print the logo
 main_logo()
 
 # Prompt user for name and then welcome
@@ -21,19 +22,19 @@ quest_text()
 
 # Set the available spells and items for player + enemies
 player_spells = [study, practice, ask, handson, sleep, weekend]
-enemy_spells = [exhaustion, paternity, sick, drinking, revision]
-enemy_spells_high = [exhaustion, paternity, sick, revision]
+enemy_spells = [exhaustion, parental, sick, drinking, revision]
+enemy_spells_high = [exhaustion, parental, sick, revision]
 player_items = [{"item": redbull, "quantity": 15}, {"item": studysnack, "quantity": 10}, {"item": magicbean, "quantity": 5}]
 
 # Instantiate players
-player1 = Character(str(hero.ljust(40, ' ')), 9999, 600, 999, 500, player_spells, player_items)
+player1 = Character(str(hero.ljust(40, ' ')), 999, 999, 666, 500, player_spells, player_items)
 players = [player1]
 total_players = len(players)
 
 # Instantiate enemies
 enemy1 = Character(str("AWS_Solutions_Architect_Associate".ljust(40, ' ')), 2000, 1000, 300, 250, enemy_spells, [])
 enemy2 = Character(str("AWS_SysOps_Associate".ljust(40, ' ')), 4000, 1000, 800, 250, enemy_spells_high, [])
-enemy3 = Character(str("AWS_Developer_Associate".ljust(40, ' ')), 2500, 1000, 300, 250, enemy_spells, [])
+enemy3 = Character(str("AWS_Developer_Associate".ljust(40, ' ')), 1500, 1000, 300, 250, enemy_spells, [])
 enemies = [enemy1, enemy2, enemy3]
 total_enemies = len(enemies)
 
@@ -41,7 +42,7 @@ total_enemies = len(enemies)
 defeated_enemies = 0
 defeated_players = 0
 
-running = True
+battle = True
 i = 0
 
 # Print opening battle text
@@ -51,7 +52,7 @@ print(f'\n\n{bcolors.FAIL}{bcolors.BOLD}You have no choice, defeat it using all 
 time.sleep(1)
 
 # Battle code
-while running:
+while battle:
     print(f'\n\n============================================================\n')
     # Print the health bars of all participants
     print(f'NAME                                                     HP                                      MP')
@@ -62,103 +63,146 @@ while running:
         enemy.get_enemy_stats()
 
     # If battle is ongoing, proceed with player turn
+    chooseaction = True
     for player in players:   
+        while chooseaction:
+            try:
+                player.choose_action()
+                choice = input('    Choose action: ')
+                index = int(choice) - 1
+                # Index 0 is the "Attack" option
+                if index == 0:
+                    choosetarget = True
+                    while choosetarget:
+                        enemy = player.choose_target(enemies)
+                        if enemy in range(0, len(enemies)):
+                            dmg = player.generate_damage()
+                            enemies[enemy].take_damage(dmg)
+                            print(f'\n{player.name.replace(" ", "")} attacked {enemies[enemy].name.replace(" ", "")} for {dmg} damage.')
+                            choosetarget = False
+                            chooseaction = False
+                            break
+                        else:
+                            print("You didn't choose a valid opponent, please try again!")
+                    
+                    if enemies[enemy].get_hp() == 0:
+                        print(f'\n{enemies[enemy].name.replace(" ", "")} has been defeated!')
+                        del enemies[enemy]
+                        defeated_enemies += 1
+                    break
 
-        player.choose_action()
-        choice = input('    Choose action: ')
-        index = int(choice) - 1
+                # Index 1 is the "Magic" option
+                elif index == 1:
+                    choosemagic = True
+                    while choosemagic:
+                        player.choose_magic()
+                        magic_choice = int(input('    Choose magic: ')) -1
+                        
+                        if magic_choice in range(0, len(player.magic)):
+                            spell = player.magic[magic_choice]
+                            magic_dmg = spell.generate_damage()
+                            current_mp = player.get_mp()
 
-        # Index 0 is the "Attack" option
-        if index == 0:
-            dmg = player.generate_damage()
-            enemy = player.choose_target(enemies)
-            enemies[enemy].take_damage(dmg)
-            print(f'\n{player.name.replace(" ", "")} attacked {enemies[enemy].name.replace(" ", "")} for {dmg} damage.')
+                            if spell.cost > current_mp:
+                                print(f'{bcolors.FAIL}\nNot enough MP to cast that!\n{bcolors.ENDC}')
+                                continue
+                            player.reduce_mp(spell.cost)
 
-            if enemies[enemy].get_hp() == 0:
-                print(f'\n{enemies[enemy].name.replace(" ", "")} has been defeated!')
-                del enemies[enemy]
-                defeated_enemies += 1
+                            if spell.type == "white":
+                                player.heal(magic_dmg)
+                                print(f'{bcolors.OKGREEN}\n{spell.name} heals for {str(magic_dmg)} HP.{bcolors.ENDC}')
+                                choosemagic = False
+                                chooseaction = False
+                            elif spell.type == "black":
+                                choosetarget = True
+                                while choosetarget:
+                                    enemy = player.choose_target(enemies)
+                                    if enemy in range(0, len(enemies)):
+                                        enemies[enemy].take_damage(magic_dmg)
+                                        print(f'{bcolors.OKBLUE}\n{player.name.replace(" ", "")} cast {spell.name} against {enemies[enemy].name.replace(" ", "")} dealing {str(magic_dmg)} damage.{bcolors.ENDC}')
+                                        choosetarget = False
+                                        choosemagic = False
+                                        chooseaction = False
+                                        break
+                                    else:
+                                        print("You didn't choose a valid opponent, please pick again!")
+                                
+                                if enemies[enemy].get_hp() == 0:
+                                    print(f'\n{enemies[enemy].name.replace(" ", "")} has been defeated!')
+                                    del enemies[enemy]
+                                    defeated_enemies += 1
+                        else:
+                            print("You didn't choose a valid magic option, please try again!")
+                            break
 
-        # Index 1 is the "Magic" option
-        elif index == 1:
-            player.choose_magic()
-            magic_choice = int(input('    Choose magic: ')) -1
-                
-            if magic_choice == -1:
-                continue
+                # Index 2 is the "Item" option
+                elif index == 2:
+                    chooseitem = True
+                    while chooseitem:
+                        player.choose_item()
+                        item_choice = int(input('    Choose item: ')) - 1
+                        if item_choice in range(0, len(player.items)):
+                            item = player.items[item_choice]["item"]
+                            if player.items[item_choice]["quantity"] == 0:
+                                print(f'{bcolors.FAIL}\nNone left...{bcolors.ENDC}')
+                                break
+                            else:
+                                player.items[item_choice]["quantity"] -= 1
 
-            spell = player.magic[magic_choice]
-            magic_dmg = spell.generate_damage()
-
-            current_mp = player.get_mp()
-
-            if spell.cost > current_mp:
-                print(f'{bcolors.FAIL}\nNot enough MP to cast that!\n{bcolors.ENDC}')
-                continue
-
-            player.reduce_mp(spell.cost)
-
-            if spell.type == "white":
-                player.heal(magic_dmg)
-                print(f'{bcolors.OKBLUE}\n{spell.name} heals for {str(magic_dmg)} HP.{bcolors.ENDC}')
-            elif spell.type == "black":
-                enemy = player.choose_target(enemies)
-                enemies[enemy].take_damage(magic_dmg)
-                print(f'{bcolors.OKBLUE}\n{player.name.replace(" ", "")} cast {spell.name} against {enemies[enemy].name.replace(" ", "")} dealing {str(magic_dmg)} damage.\n{bcolors.ENDC}')
-
-                if enemies[enemy].get_hp() == 0:
-                    print(f'{enemies[enemy].name.replace(" ", "")} has been defeated!')
-                    del enemies[enemy]
-                    defeated_enemies += 1
-
-        # Index 2 is the "Item" option
-        elif index == 2:
-            player.choose_item()
-            item_choice = int(input('    Choose item: ')) - 1
-
-            if item_choice == -1:
-                continue
-                
-            item = player.items[item_choice]["item"]
-            if player.items[item_choice]["quantity"] == 0:
-                print(f'{bcolors.FAIL}\nNone left...{bcolors.ENDC}')
-                continue
-
-            player.items[item_choice]["quantity"] -= 1
-
-            if item.type == "potion":
-                player.heal(item.prop)
-                print(f'{bcolors.OKGREEN}\n{item.name} heals for {str(item.prop)} HP.{bcolors.ENDC}')
-            elif item.type == "elixer":
-
-                if item.name == "MegaElixer":
-                    for i in players:
-                        i.hp = i.maxhp
-                        i.mp = i.maxmp
+                                if item.type == "potion":
+                                    player.heal(item.prop)
+                                    print(f'{bcolors.OKGREEN}\n{item.name} heals for {str(item.prop)} HP.{bcolors.ENDC}')
+                                    chooseitem = False
+                                    chooseaction = False
+                                    break
+                                elif item.type == "elixer":
+                                    if item.name == "MegaElixer":
+                                        for i in players:
+                                            i.hp = i.maxhp
+                                            i.mp = i.maxmp
+                                    else:
+                                        player.hp = player.maxhp
+                                        player.mp = player.maxmp
+                                    print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP!{bcolors.ENDC}')
+                                    chooseitem = False
+                                    chooseaction = False
+                                    break
+                                elif item.type == "attack":
+                                    choosetarget = True
+                                    while choosetarget:
+                                        enemy = player.choose_target(enemies)
+                                        if enemy in range(0, len(enemies)):
+                                            enemies[enemy].take_damage(item.prop)
+                                            print(f'{bcolors.FAIL}\n{item.name} deals {str(item.prop)} damage to {enemies[enemy].name.replace(" ", "")}.{bcolors.ENDC}')
+                                            choosetarget = False
+                                            chooseitem = False
+                                            chooseaction = False
+                                            break
+                                        else:
+                                            print("You didn't choose a valid opponent, please pick again!")
+                                    
+                                    if enemies[enemy].get_hp() == 0:
+                                        print(f'\n{enemies[enemy].name.replace(" ", "")} has been defeated!\n')
+                                        del enemies[enemy]
+                                        defeated_enemies += 1
+                        else:
+                            print("You didn't choose a valid option, please try again!")
+                            break
                 else:
-                    player.hp = player.maxhp
-                    player.mp = player.maxmp
-                print(f'{bcolors.OKGREEN}\n{item.name} fully restores HP/MP!{bcolors.ENDC}')
-            elif item.type == "attack":
-                enemy = player.choose_target(enemies)
-                enemies[enemy].take_damage(item.prop)
-                print(f'{bcolors.FAIL}\n{item.name} deals {str(item.prop)} damage to {enemies[enemy].name.replace(" ", "")}.{bcolors.ENDC}')
+                    print("You didn't choose a valid option, please try again!")
+            except ValueError:
+                print("Oops, something went terribly wrong!")
+                sys.exit(1)
 
-                if enemies[enemy].get_hp() == 0:
-                    print(f'{enemies[enemy].name.replace(" ", "")} has been defeated!\n')
-                    del enemies[enemy]
-                    defeated_enemies += 1
-    
         # Check if player won
         if defeated_enemies == total_enemies:
-            print(f'{bcolors.OKGREEN}\nYou have defeated the enemy!{bcolors.ENDC}')
-            running = False
+            print(f'{bcolors.OKGREEN}{bcolors.BOLD}\nYou have passed the certification(s)!\nMake sure you post about it on LinkedIn and update your Kimble capabilities!{bcolors.ENDC}')
+            battle = False
             break
         # Check if enemy won
         elif defeated_players == total_players:
-            print(f'{bcolors.FAIL}The enemies have defeated you!{bcolors.ENDC}')
-            running = False
+            print(f'{bcolors.FAIL}{bcolors.BOLD}\nOh dear, it looks like you took on too much! Maybe just try and take on an easier certification next time?!{bcolors.ENDC}')
+            battle = False
             break
         
     time.sleep(1)
@@ -175,7 +219,7 @@ while running:
             print(f'{bcolors.FAIL}{bcolors.BOLD}\n{enemy.name.replace(" ", "")} attacks {players[target].name.replace(" ", "")} for {enemy_dmg} damage.{bcolors.ENDC}')
 
             if players[target].get_hp() == 0:
-                print(f'{bcolors.FAIL}{bcolors.BOLD}{players[target].name.replace(" ", "")} has been defeated!{bcolors.ENDC}')
+                print(f'\n{bcolors.FAIL}{bcolors.BOLD}{players[target].name.replace(" ", "")} has been defeated!{bcolors.ENDC}')
                 del players[target]
                 defeated_players += 1
         
@@ -193,26 +237,25 @@ while running:
                 print(f'{bcolors.OKBLUE}\n{enemy.name.replace(" ", "")} cast {spell.name} against {players[target].name.replace(" ", "")} dealing {str(magic_dmg)} damage.{bcolors.ENDC}')
 
                 if players[target].get_hp() == 0:
-                    print(f'{bcolors.FAIL}{bcolors.BOLD}{players[target].name.replace(" ", "")} has been defeated!{bcolors.ENDC}')
+                    print(f'\n{bcolors.FAIL}{bcolors.BOLD}{players[target].name.replace(" ", "")} has been defeated!{bcolors.ENDC}')
                     del players[target]
                     defeated_players += 1
 
         # Check if player won
         if defeated_enemies == total_enemies:
-            print(f'{bcolors.OKGREEN}\nYou have passed the certification(s)!\nMake sure you post about it on LinkedIn and update your Kimble capabilities!{bcolors.ENDC}')
-            running = False
+            print(f'{bcolors.OKGREEN}{bcolors.BOLD}\nYou have passed the certification(s)!\nMake sure you post about it on LinkedIn and update your Kimble capabilities!{bcolors.ENDC}')
+            battle = False
             break
         # Check if enemy won
         elif defeated_players == total_players:
-            print(f'{bcolors.FAIL}\nOh dear, it looks like you took on too much! Maybe just try and take on an easier certification next time?!{bcolors.ENDC}')
-            running = False
+            print(f'{bcolors.FAIL}{bcolors.BOLD}\nOh dear, it looks like you took on too much! Maybe just try and take on an easier certification next time?!{bcolors.ENDC}')
+            battle = False
             break
     
     time.sleep(1)
 
 # Post-battle, print the epilogue
 epilogue_text()
-time.sleep(2)
 
 # Print the end logo
 game_over()
