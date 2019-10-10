@@ -35,3 +35,13 @@ def quest_text():
     "...\n" + 
     "Oh no! It's an ambush!\n")
     time.sleep(1)
+
+def epilogue_text():
+    print_quick("\n\nAnd so ends the tale of our hero.\n" +
+    "\n" + 
+    "Whether they triumphed over adversity or succumbed to the enemy, I hope you had fun playing!\n" +
+    "\n" + 
+    "I hope that this program has taught you a little about the power of Python!\n" +
+    "\n" + 
+    "Untill next time...\n")
+    time.sleep(1)

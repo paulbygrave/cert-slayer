@@ -1,4 +1,4 @@
-FROM rackspacedot/python37
+FROM python
 LABEL maintainer="paul.bygrave@contino.io"
 RUN apt-get update
 WORKDIR /apps/cert-slayer

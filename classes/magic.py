@@ -20,7 +20,7 @@ handson = Spell("Do a Hands-On lab", 200, 1750, "black")
 
 # Create Enemy Black Magic
 exhaustion = Spell("Exhaustion", 100, 800, "black")
-paternity = Spell("Paternity Leave", 150, 1350, "black")
+paternity = Spell("Parental Leave", 150, 1350, "black")
 sick = Spell("Sick Leave", 80, 700, "black")
 drinking = Spell("Contino Monthly Gathering Drinking Session", 250, 2000, "black")
 

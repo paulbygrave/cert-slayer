@@ -6,31 +6,33 @@ from storytext import *
 from logos import *
 import random
 
-# Print the title intro
+# Print the prologue 
 intro_text()
 
 # Print the logo
 main_logo()
 
-# Prompt user for name
+# Prompt user for name and then welcome
 hero = input('Welcome Hero! Please tell me your name so I may record your noble deeds! : ')
 print(f'\nWelcome {hero}!\nThis is your story....\n')
 
+# Print the initial quest text
 quest_text()
 
+# Set the available spells and items for player + enemies
 player_spells = [study, practice, ask, handson, sleep, weekend]
 enemy_spells = [exhaustion, paternity, sick, drinking, revision]
 enemy_spells_high = [exhaustion, paternity, sick, revision]
 player_items = [{"item": redbull, "quantity": 15}, {"item": studysnack, "quantity": 10}, {"item": magicbean, "quantity": 5}]
 
 # Instantiate players
-player1 = Character(str(hero.ljust(40, ' ')), 9999, 600, 777, 500, player_spells, player_items)
+player1 = Character(str(hero.ljust(40, ' ')), 9999, 600, 999, 500, player_spells, player_items)
 players = [player1]
 total_players = len(players)
 
 # Instantiate enemies
 enemy1 = Character(str("AWS_Solutions_Architect_Associate".ljust(40, ' ')), 2000, 1000, 300, 250, enemy_spells, [])
-enemy2 = Character(str("AWS_SysOps_Associate".ljust(40, ' ')), 4000, 1000, 999, 250, enemy_spells_high, [])
+enemy2 = Character(str("AWS_SysOps_Associate".ljust(40, ' ')), 4000, 1000, 800, 250, enemy_spells_high, [])
 enemy3 = Character(str("AWS_Developer_Associate".ljust(40, ' ')), 2500, 1000, 300, 250, enemy_spells, [])
 enemies = [enemy1, enemy2, enemy3]
 total_enemies = len(enemies)
@@ -42,11 +44,13 @@ defeated_players = 0
 running = True
 i = 0
 
-# Battle message displays
+# Print opening battle text
 print(f'\n\n{bcolors.FAIL}{bcolors.BOLD}A VICIOUS CLOUD CERTIFICATION ATTACKS!!!{bcolors.ENDC}')
 time.sleep(1)
 print(f'\n\n{bcolors.FAIL}{bcolors.BOLD}You have no choice, defeat it using all the magic and powers in your arsenal!{bcolors.ENDC}')
 time.sleep(1)
+
+# Battle code
 while running:
     print(f'\n\n============================================================\n')
     # Print the health bars of all participants
@@ -57,7 +61,7 @@ while running:
     for enemy in enemies:
         enemy.get_enemy_stats()
 
-    # If battle is ongoing, proceed with turn
+    # If battle is ongoing, proceed with player turn
     for player in players:   
 
         player.choose_action()
@@ -182,7 +186,7 @@ while running:
                 enemy.heal(magic_dmg)
                 print(f'{bcolors.OKBLUE}\n{enemy.name.replace(" ", "")} cast {spell.name} which heals for {str(magic_dmg)} HP.{bcolors.ENDC}')
             elif spell.type == "black":
-               
+            
                 target = random.randrange(0, len(players))
                 players[target].take_damage(magic_dmg)
 
@@ -206,4 +210,10 @@ while running:
     
     time.sleep(1)
 
-    
+# Post-battle, print the epilogue
+epilogue_text()
+time.sleep(2)
+
+# Print the end logo
+game_over()
+
