@@ -2,7 +2,7 @@ from classes.colours import bcolors
 from classes.battle import Character
 from classes.magic import *
 from classes.inventory import *
-from storytext import *
+from assets.storytext import intro_text, quest_text, epilogue_text, end_credits
 from logos import *
 import random
 import sys
@@ -260,3 +260,5 @@ epilogue_text()
 # Print the end logo
 game_over()
 
+# Print credits
+end_credits()

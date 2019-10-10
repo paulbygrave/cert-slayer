@@ -7,6 +7,12 @@ def print_quick(str):
         sys.stdout.flush()
         time.sleep(0.05)
 
+def print_slow(str):
+    for letter in str:
+        sys.stdout.write(letter)
+        sys.stdout.flush()
+        time.sleep(0.1)
+
 def intro_text():
     print_quick("\n\n\nA long, long time ago...\n\n" +
     "...\n\n" +
@@ -44,4 +50,17 @@ def epilogue_text():
     "I hope that this program has taught you a little about the power of Python!\n" +
     "\n" + 
     "Untill next time...\n")
+    time.sleep(1)
+
+def end_credits():
+    print_slow("\nCredits\n\n" + 
+    "Studio:\n" +
+    "Designer: Paul\n" +
+    "Story: Paul\n" + 
+    "Lead Programmer: Paul\n\n" +
+    "QA:\n" +
+    "Alpha Tester: Paul\n" + 
+    "Beta Tester: Sean\n\n" + 
+    "Special Thanks:\n" +
+    "Kostas\n\n\n")
     time.sleep(1)
