@@ -12,14 +12,6 @@ The easiest way to simply try the code is to run the pre-built Docker image in D
 
 $ docker run -it --name cert-slayer paulbygrave/cert-slayer
 
-
-## Running the code locally
-
-Alternatively, you can fork and clone this repository, then execute the code by running:
-
-$ python3 main.py
-
-
 ### Installing Docker for Mac
 
 If you haven't got Docker installed, follow the below install instructions for MacOS (written for non-techies)!
@@ -57,3 +49,10 @@ sudo usermod -a -G docker $(whoami)
 #### Test the installation by running a simple container:
 
 docker run hello-world
+
+
+## Running the code locally
+
+Alternatively, you can fork and clone this repository, then execute the code by running:
+
+$ python3 main.py
